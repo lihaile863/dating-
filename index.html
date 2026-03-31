@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Find Your Match</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pink:#e8426f;--pink-dark:#c4355b;--purple:#6c5ce7;--dark:#1a1128;--darker:#0f0a1a;--text:#f0e6ff;--text-dim:#9b8cb8;--card-bg:rgba(30,20,50,.85)}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+body{font-family:'Inter',system-ui,sans-serif;background:var(--darker);color:var(--text);min-height:100vh;min-height:100dvh;overflow-x:hidden}
+.bg-glow{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(232,66,111,.12),transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(108,92,231,.1),transparent 50%)}
+.container{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:20px 16px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
+.logo{text-align:center;margin-bottom:24px;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--pink);font-weight:700}
+.card{background:var(--card-bg);border:1px solid rgba(232,66,111,.15);border-radius:20px;padding:28px 24px;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.step{display:none}
+.step.active{display:block;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;margin-bottom:28px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--purple));border-radius:4px;transition:width .4s ease}
+h1{font-size:22px;font-weight:800;line-height:1.3;margin-bottom:8px;background:linear-gradient(135deg,#fff,var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{font-size:14px;color:var(--text-dim);margin-bottom:24px;line-height:1.5}
+.question{font-size:16px;font-weight:600;margin-bottom:16px;line-height:1.4}
+.options{display:flex;flex-direction:column;gap:10px}
+.option{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 18px;font-size:14px;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px;-webkit-tap-highlight-color:transparent}
+.option:hover,.option:active{border-color:var(--pink);background:rgba(232,66,111,.08)}
+.option-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,.05);flex-shrink:0}
+.option-text{flex:1}
+.option-text span{display:block;font-size:12px;color:var(--text-dim);margin-top:2px}
+.online-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(46,213,115,.12);border:1px solid rgba(46,213,115,.2);color:#2ed573;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+.online-dot{width:7px;height:7px;background:#2ed573;border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.loading-screen{text-align:center;padding:40px 0}
+.spinner{width:56px;height:56px;border:3px solid rgba(255,255,255,.08);border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 24px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:14px;color:var(--text-dim);margin-bottom:8px}
+.loading-count{font-size:28px;font-weight:800;color:var(--pink)}
+.match-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:20px 0}
+.stat{text-align:center;padding:12px 8px;background:rgba(255,255,255,.03);border-radius:12px}
+.stat-num{font-size:20px;font-weight:800;color:var(--pink)}
+.stat-label{font-size:11px;color:var(--text-dim);margin-top:2px}
+.cta-btn{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--pink),var(--pink-dark));color:#fff;font-size:16px;font-weight:700;border:none;border-radius:14px;cursor:pointer;text-align:center;text-decoration:none;transition:all .2s;box-shadow:0 8px 30px rgba(232,66,111,.3);-webkit-tap-highlight-color:transparent;letter-spacing:.3px}
+.cta-btn:active{transform:scale(.97)}
+.cta-pulse{animation:ctaPulse 2s infinite}
+@keyframes ctaPulse{0%,100%{box-shadow:0 8px 30px rgba(232,66,111,.3)}50%{box-shadow:0 8px 40px rgba(232,66,111,.5)}}
+.disclaimer{text-align:center;font-size:11px;color:rgba(255,255,255,.25);margin-top:16px;line-height:1.4}
+.avatars{display:flex;justify-content:center;margin:16px 0}
+.avatars span{width:36px;height:36px;border-radius:50%;border:2px solid var(--darker);margin-left:-10px;display:flex;align-items:center;justify-content:center;font-size:14px;background:linear-gradient(135deg,var(--pink),var(--purple))}
+.avatars span:first-child{margin-left:0}
+.trust-row{display:flex;justify-content:center;gap:16px;margin-top:16px;font-size:11px;color:var(--text-dim)}
+.trust-row span{display:flex;align-items:center;gap:4px}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="container">
+<div class="logo">&#9825; MatchVibe</div>
+<div class="card">
+
+<!-- Step 0: Intro -->
+<div class="step active" id="step0">
+<div class="online-badge"><span class="online-dot"></span><span id="onlineCount">2,847</span> girls online near you</div>
+<h1>Find Girls Who Actually Want to Talk to You</h1>
+<p class="subtitle">Answer 3 quick questions and we'll match you with girls who are looking for someone like you right now.</p>
+<div class="avatars"><span>&#128105;</span><span>&#128101;</span><span>&#128103;</span><span>&#128587;</span><span>&#128131;</span></div>
+<button class="cta-btn" onclick="goStep(1)">Start Matching &#8594;</button>
+<div class="trust-row"><span>&#128274; Private</span><span>&#9889; 30 sec</span><span>&#128175; Free</span></div>
+</div>
+
+<!-- Step 1: Question 1 -->
+<div class="step" id="step1">
+<div class="progress-bar"><div class="progress-fill" style="width:33%"></div></div>
+<p class="question">What are you looking for?</p>
+<div class="options">
+<div class="option" onclick="goStep(2)">
+<div class="option-icon">&#128172;</div>
+<div class="option-text">Casual chat &amp; flirting<span>No pressure, just fun</span></div>
+</div>
+<div class="option" onclick="goStep(2)">
+<div class="option-icon">&#10084;&#65039;</div>
+<div class="option-text">A real connection<span>Someone who gets me</span></div>
+</div>
+<div class="option" onclick="goStep(2)">
+<div class="option-icon">&#128293;</div>
+<div class="option-text">Something exciting tonight<span>Skip the small talk</span></div>
+</div>
+</div>
+</div>
+
+<!-- Step 2: Question 2 -->
+<div class="step" id="step2">
+<div class="progress-bar"><div class="progress-fill" style="width:66%"></div></div>
+<p class="question">What's your age range?</p>
+<div class="options">
+<div class="option" onclick="goStep(3)">
+<div class="option-icon">&#129489;</div>
+<div class="option-text">18 - 24</div>
+</div>
+<div class="option" onclick="goStep(3)">
+<div class="option-icon">&#128104;</div>
+<div class="option-text">25 - 34</div>
+</div>
+<div class="option" onclick="goStep(3)">
+<div class="option-icon">&#129492;</div>
+<div class="option-text">35 - 44</div>
+</div>
+<div class="option" onclick="goStep(3)">
+<div class="option-icon">&#128100;</div>
+<div class="option-text">45+</div>
+</div>
+</div>
+</div>
+
+<!-- Step 3: Question 3 -->
+<div class="step" id="step3">
+<div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+<p class="question">Do you prefer girls who text first?</p>
+<div class="options">
+<div class="option" onclick="goStep(4)">
+<div class="option-icon">&#128525;</div>
+<div class="option-text">Yes! That's exactly what I want<span>Most popular answer</span></div>
+</div>
+<div class="option" onclick="goStep(4)">
+<div class="option-icon">&#129335;</div>
+<div class="option-text">I don't mind either way</div>
+</div>
+</div>
+</div>
+
+<!-- Step 4: Loading -->
+<div class="step" id="step4">
+<div class="loading-screen">
+<div class="spinner"></div>
+<p class="loading-text">Finding your matches...</p>
+<p class="loading-count" id="matchCount">0</p>
+<p class="loading-text" style="margin-top:4px">girls matched so far</p>
+</div>
+</div>
+
+<!-- Step 5: Results -->
+<div class="step" id="step5">
+<div class="online-badge"><span class="online-dot"></span>Matches ready!</div>
+<h1>We Found Your Matches!</h1>
+<div class="match-stats">
+<div class="stat"><div class="stat-num" id="resultCount">16</div><div class="stat-label">Matches</div></div>
+<div class="stat"><div class="stat-num">93%</div><div class="stat-label">Reply rate</div></div>
+<div class="stat"><div class="stat-num">Free</div><div class="stat-label">To join</div></div>
+</div>
+<p class="subtitle" style="margin-bottom:20px">These girls are online right now and ready to chat. Create your free profile to see who matched with you.</p>
+<a class="cta-btn cta-pulse" id="offerLink" href="#" target="_blank" rel="noopener">View My Matches &#8212; It's Free &#8594;</a>
+<div class="disclaimer">By continuing you agree to the Terms of Service.<br>Free registration. Must be 18+.</div>
+</div>
+
+</div>
+</div>
+
+<script>
+// ========================================
+// CONFIG: Replace with your affiliate link
+// ========================================
+var OFFER_URL = "https://singleheartshere.com/TXJqSX3V?aid=ghhgxfabgg&kid=hfkdhbkkhdg";
+
+function goStep(n) {
+  var steps = document.querySelectorAll('.step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active');
+  }
+  document.getElementById('step' + n).classList.add('active');
+  if (n === 4) runLoading();
+}
+
+function runLoading() {
+  var count = 0;
+  var target = Math.floor(Math.random() * 8) + 12;
+  var el = document.getElementById('matchCount');
+  var iv = setInterval(function() {
+    count++;
+    el.textContent = count;
+    if (count >= target) {
+      clearInterval(iv);
+      document.getElementById('resultCount').textContent = target;
+      setTimeout(function() { goStep(5); }, 600);
+    }
+  }, 120);
+}
+
+// Randomize online count
+var oc = 2400 + Math.floor(Math.random() * 800);
+var ocEl = document.getElementById('onlineCount');
+ocEl.textContent = oc.toLocaleString();
+setInterval(function() {
+  oc += Math.floor(Math.random() * 7) - 3;
+  ocEl.textContent = oc.toLocaleString();
+}, 3000);
+
+// Set offer link
+document.getElementById('offerLink').href = OFFER_URL;
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
