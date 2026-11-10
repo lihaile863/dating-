@@ -3,108 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Private Chat - Live</title>
+    <title>Private Message</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #0b0f19; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
-        .phone-frame { background: #121824; border-radius: 24px; border: 2px solid #2a3447; width: 100%; max-width: 380px; padding: 15px; box-shadow: 0 15px 35px rgba(244,63,94,0.15); position: relative; overflow: hidden; }
+        body { background-color: #111b21; color: #e9edef; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .chat-container { width: 100%; max-width: 420px; height: 100vh; background: #0b141a; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        @media (min-height: 700px) {
+            .chat-container { height: 750px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #222d34; }
+        }
         
-        /* 顶部通知栏 */
-        .top-bar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #1f293d; margin-bottom: 15px; }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .avatar-wrap { position: relative; width: 44px; height: 44px; }
-        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #f43f5e; }
-        .status-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #22c55e; border: 2px solid #121824; border-radius: 50%; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .name-tag h3 { font-size: 15px; font-weight: bold; color: #fff; }
-        .name-tag p { font-size: 11px; color: #f43f5e; }
+        /* 模仿聊天软件顶部导航栏 */
+        .chat-header { background: #202c33; padding: 10px 15px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #222d34; z-index: 10; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .header-info h2 { font-size: 16px; color: #f1f1f2; font-weight: 500; }
+        .header-info p { font-size: 12px; color: #00a884; }
 
-        /* 视窗背景（大图诱惑区） */
-        .media-preview { position: relative; width: 100%; height: 260px; border-radius: 14px; overflow: hidden; margin-bottom: 15px; background: #000; }
-        .media-preview img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); }
-        .blur-overlay { position: absolute; inset: 0; backdrop-filter: blur(12px); background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .lock-icon { font-size: 32px; margin-bottom: 8px; }
+        /* 聊天内容区 */
+        .chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-image: radial-gradient(#222d34 1px, transparent 1px); background-size: 20px 20px; }
+        
+        .bubble { max-width: 80%; padding: 10px 14px; border-radius: 8px; font-size: 14px; line-height: 1.4; position: relative; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .incoming { background: #202c33; align-self: flex-start; border-top-left-radius: 0; color: #e9edef; }
+        .outgoing { background: #005c4b; align-self: flex-end; border-top-right-radius: 0; color: #e9edef; }
+        
+        .timestamp { font-size: 10px; color: #8696a0; float: right; margin-left: 10px; margin-top: 4px; line-height: 12px; }
 
-        /* 聊天气泡区 */
-        .chat-bubble { background: #1e293b; padding: 12px 15px; border-radius: 12px; font-size: 14px; line-height: 1.4; margin-bottom: 15px; border-left: 3px solid #f43f5e; }
-        .chat-bubble span { color: #f43f5e; font-weight: bold; }
+        /* 语音条样式 */
+        .voice-msg { display: flex; align-items: center; gap: 10px; min-width: 150px; cursor: pointer; }
+        .play-btn { width: 30px; height: 30px; background: #00a884; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; }
 
-        /* 互动按钮 */
-        .btn { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); color: #fff; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; text-decoration: none; display: block; text-align: center; box-shadow: 0 4px 15px rgba(244,63,94,0.4); animation: pulse-btn 1.5s infinite; }
-        @keyframes pulse-btn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-
-        .timer-box { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 10px; }
-        .timer-box span { color: #fbbf24; font-weight: bold; }
+        /* 底部互动操作区 */
+        .chat-footer { background: #202c33; padding: 12px 15px; display: flex; flex-direction: column; gap: 10px; }
+        .action-btn { background: #00a884; color: #fff; border: none; padding: 12px; border-radius: 24px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .typing-indicator { font-size: 12px; color: #8696a0; padding-left: 5px; height: 18px; }
     </style>
 </head>
 <body>
 
-<div class="phone-frame">
-    <!-- 顶部：伪装真实本地用户 -->
-    <div class="top-bar">
-        <div class="user-info">
-            <div class="avatar-wrap">
-                <!-- 替换为更具视觉冲击力的真人素人头像 -->
-                <img class="avatar" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80" alt="User">
-                <div class="status-dot"></div>
-            </div>
-            <div class="name-tag">
-                <h3 id="local-user">Natasha (距离 800m)</h3>
-                <p>刚刚在线 • 正在发来语音</p>
-            </div>
-        </div>
-        <div style="font-size: 18px;">🔥</div>
-    </div>
-
-    <!-- 中间：动态高斯模糊诱惑图 (视觉抓眼球) -->
-    <div class="media-preview">
-        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80" alt="Preview">
-        <div class="blur-overlay">
-            <div class="lock-icon">🔒</div>
-            <p style="font-size: 13px; font-weight: bold; margin-bottom: 4px;">私密视频与照片已锁定</p>
-            <p style="font-size: 11px; color: #cbd5e1;">完成年龄与地理位置校验即可解锁全部内容</p>
+<div class="chat-container">
+    <!-- 顶部 -->
+    <div class="chat-header">
+        <img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" alt="Avatar">
+        <div class="header-info">
+            <h2 id="username">Jessica</h2>
+            <p>在线 • 距离你 700m</p>
         </div>
     </div>
 
-    <!-- 底部：聊天气泡文案 -->
-    <div class="chat-bubble">
-        “我在家洗完澡了，今晚一个人好无聊... 离你只有不到 1 公里，要不要过来陪我？ <span>[点击查看私密聊天]</span>”
+    <!-- 聊天气泡流 -->
+    <div class="chat-body" id="chat-stream">
+        <!-- 动态生成的聊天记录会插在这里 -->
     </div>
 
-    <!-- 强转化按钮（直连 BeMob 链接） -->
-    <!-- 🔴 记得把下方的链接换成你的 BeMob 追踪链接 🔴 -->
-    <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="btn">解锁与她私密对话 ➔</a>
-
-    <div class="timer-box">
-        ⚠️ 匹配名额仅为为您保留：<span id="countdown">02:59</span>
+    <!-- 底部输入/互动区 -->
+    <div class="chat-footer">
+        <div class="typing-indicator" id="typing">Jessica 正在输入...</div>
+        <!-- 🔴 把这里替换成你的 BeMob 追踪链接 🔴 -->
+        <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="action-btn" id="reply-btn" style="display: none;">点击回复并查看私密照片 ➔</a>
     </div>
 </div>
 
 <script>
-    // 手机震动触发
-    window.onload = function() {
-        if ("vibrate" in navigator) {
-            navigator.vibrate([300, 100, 300]);
-        }
-        startTimer(179);
-    };
+    // 替换为你的 BeMob 追踪链接
+    const BEMOB_URL = "https://YOUR_BEMOB_TRACKING_URL_HERE.com";
+    document.getElementById('reply-btn').href = BEMOB_URL;
 
-    // 倒计时逻辑
-    function startTimer(duration) {
-        let timer = duration, minutes, seconds;
-        let display = document.getElementById('countdown');
-        let countdownInterval = setInterval(function () {
-            minutes = parseInt(timer / 60, 10);
-            seconds = parseInt(timer % 60, 10);
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            display.textContent = minutes + ":" + seconds;
-            if (--timer < 0) {
-                clearInterval(countdownInterval);
-                display.textContent = "00:00 (已失效)";
-            }
-        }, 1000);
+    // 模拟真实聊天的动态剧本
+    const chatSteps = [
+        { type: 'incoming', text: '嗨... 你刚才是不是在附近看我资料？ 👀', delay: 1000 },
+        { type: 'incoming', text: '我看你离我超级近，就顺手点进来了。', delay: 2500 },
+        { type: 'incoming', text: '一个人在家好无聊，你今晚有空过来坐坐吗？ 🍷', delay: 4500 },
+        { type: 'voice', text: '发送了一条语音消息 (0:14)', delay: 6500 },
+        { type: 'incoming', text: '这是我刚才拍的，不过只能看一眼哦... 👇', delay: 8500 }
+    ];
+
+    const chatStream = document.getElementById('chat-stream');
+    const typingIndicator = document.getElementById('typing');
+    const replyBtn = document.getElementById('reply-btn');
+
+    function getTimeString() {
+        const d = new Date();
+        return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
     }
+
+    let currentStep = 0;
+
+    function playChat() {
+        if (currentStep < chatSteps.length) {
+            typingIndicator.style.display = 'block';
+            let step = chatSteps[currentStep];
+
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                let bubble = document.createElement('div');
+                bubble.className = `bubble incoming`;
+
+                if (step.type === 'voice') {
+                    bubble.innerHTML = `
+                        <div class="voice-msg">
+                            <div class="play-btn">▶</div>
+                            <span>语音消息 [0:14]</span>
+                        </div>
+                        <span class="timestamp">${getTimeString()}</span>
+                    `;
+                } else {
+                    bubble.innerHTML = `${step.text} <span class="timestamp">${getTimeString()}</span>`;
+                }
+
+                chatStream.appendChild(bubble);
+                chatStream.scrollTop = chatStream.scrollHeight;
+
+                currentStep++;
+                playChat();
+            }, step.delay - (currentStep === 0 ? 0 : chatSteps[currentStep - 1].delay));
+        } else {
+            // 剧本走完，显示强转化按钮
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                replyBtn.style.display = 'block';
+                if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
+            }, 1000);
+        }
+    }
+
+    // 页面加载后触发震动并开始播放聊天剧本
+    window.onload = function() {
+        if ("vibrate" in navigator) navigator.vibrate(100);
+        setTimeout(playChat, 500);
+    };
 </script>
 </body>
 </html>
