@@ -3,134 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Private Message</title>
+    <title>Chat Radar Active</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #111b21; color: #e9edef; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .chat-container { width: 100%; max-width: 420px; height: 100vh; background: #0b141a; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-        @media (min-height: 700px) {
-            .chat-container { height: 750px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #222d34; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #0b141a; color: #e9edef; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .app-container { width: 100%; max-width: 410px; height: 100vh; background: #111b21; display: flex; flex-direction: column; position: relative; }
+        @media (min-height: 650px) {
+            .app-container { height: 720px; border-radius: 20px; border: 1px solid #222d34; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
         }
-        
-        /* 模仿聊天软件顶部导航栏 */
-        .chat-header { background: #202c33; padding: 10px 15px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #222d34; z-index: 10; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        .header-info h2 { font-size: 16px; color: #f1f1f2; font-weight: 500; }
-        .header-info p { font-size: 12px; color: #00a884; }
 
-        /* 聊天内容区 */
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-image: radial-gradient(#222d34 1px, transparent 1px); background-size: 20px 20px; }
-        
-        .bubble { max-width: 80%; padding: 10px 14px; border-radius: 8px; font-size: 14px; line-height: 1.4; position: relative; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .incoming { background: #202c33; align-self: flex-start; border-top-left-radius: 0; color: #e9edef; }
-        .outgoing { background: #005c4b; align-self: flex-end; border-top-right-radius: 0; color: #e9edef; }
-        
-        .timestamp { font-size: 10px; color: #8696a0; float: right; margin-left: 10px; margin-top: 4px; line-height: 12px; }
+        /* 顶部黑帽私信头栏 */
+        .app-header { background: #202c33; padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #222d34; }
+        .avatar-box { position: relative; width: 44px; height: 44px; }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #00a884; }
+        .online-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #00a884; border: 2px solid #202c33; border-radius: 50%; }
+        .header-text h3 { font-size: 15px; font-weight: 600; color: #e9edef; }
+        .header-text p { font-size: 12px; color: #00a884; }
 
-        /* 语音条样式 */
-        .voice-msg { display: flex; align-items: center; gap: 10px; min-width: 150px; cursor: pointer; }
-        .play-btn { width: 30px; height: 30px; background: #00a884; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; }
+        /* 雷达扫描诱惑区 */
+        .radar-box { position: relative; width: 100%; height: 200px; background: #0b141a; display: flex; justify-content: center; align-items: center; overflow: hidden; border-bottom: 1px solid #222d34; }
+        .radar-sweep { position: absolute; width: 300px; height: 300px; background: conic-gradient(from 0deg, rgba(0, 168, 132, 0.4) 0deg, transparent 60deg); border-radius: 50%; animation: spin 2.5s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .radar-circle { position: absolute; border: 1px solid rgba(0, 168, 132, 0.2); border-radius: 50%; }
+        .radar-status { position: absolute; bottom: 10px; background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 12px; font-size: 11px; color: #8696a0; }
 
-        /* 底部互动操作区 */
-        .chat-footer { background: #202c33; padding: 12px 15px; display: flex; flex-direction: column; gap: 10px; }
-        .action-btn { background: #00a884; color: #fff; border: none; padding: 12px; border-radius: 24px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .typing-indicator { font-size: 12px; color: #8696a0; padding-left: 5px; height: 18px; }
+        /* 模拟消息流 */
+        .chat-body { flex: 1; padding: 15px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+        .msg-bubble { background: #202c33; padding: 12px; border-radius: 8px; border-top-left-radius: 0; max-width: 85%; font-size: 14px; position: relative; animation: popIn 0.3s ease; }
+        @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 毛玻璃模糊图（刺激窥探欲） */
+        .blur-media { position: relative; margin-top: 8px; border-radius: 6px; overflow: hidden; height: 140px; }
+        .blur-media img { width: 100%; height: 100%; object-fit: cover; filter: blur(14px); }
+        .lock-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; font-weight: bold; color: #fff; }
+
+        /* 强转化按钮 */
+        .action-area { padding: 15px; background: #202c33; display: flex; flex-direction: column; gap: 8px; }
+        .btn-unlock { background: #00a884; color: #111b21; border: none; padding: 14px; border-radius: 24px; font-size: 16px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 12px rgba(0,168,132,0.3); animation: pulseBtn 1.5s infinite; }
+        @keyframes pulseBtn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
     </style>
 </head>
 <body>
 
-<div class="chat-container">
-    <!-- 顶部 -->
-    <div class="chat-header">
-        <img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" alt="Avatar">
-        <div class="header-info">
-            <h2 id="username">Jessica</h2>
-            <p>在线 • 距离你 700m</p>
+<div class="app-container">
+    <!-- 1. 高仿社交软件头部 -->
+    <div class="app-header">
+        <div class="avatar-box">
+            <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Local User">
+            <div class="online-dot"></div>
+        </div>
+        <div class="header-text">
+            <h3 id="target-name">Elena (距离约 600m)</h3>
+            <p id="sub-status">🟢 正在等待您的回复...</p>
         </div>
     </div>
 
-    <!-- 聊天气泡流 -->
-    <div class="chat-body" id="chat-stream">
-        <!-- 动态生成的聊天记录会插在这里 -->
+    <!-- 2. 动态雷达指示（营造真实匹配感） -->
+    <div class="radar-box">
+        <div class="radar-circle" style="width: 80px; height: 80px;"></div>
+        <div class="radar-circle" style="width: 160px; height: 160px;"></div>
+        <div class="radar-sweep"></div>
+        <div class="radar-status" id="radar-text">🛰️ 雷达定位中：锁定您当前区域的私信</div>
     </div>
 
-    <!-- 底部输入/互动区 -->
-    <div class="chat-footer">
-        <div class="typing-indicator" id="typing">Jessica 正在输入...</div>
-        <!-- 🔴 把这里替换成你的 BeMob 追踪链接 🔴 -->
-        <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="action-btn" id="reply-btn" style="display: none;">点击回复并查看私密照片 ➔</a>
+    <!-- 3. 私密对话流 -->
+    <div class="chat-body">
+        <div class="msg-bubble">
+            “你也在附近吗？我看到系统提示你的位置了... 刚好今晚一个人，要不要交换一下私密照片？”
+            <div class="blur-media">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80" alt="Private Preview">
+                <div class="lock-overlay">
+                    <span style="font-size: 20px;">🔒</span>
+                    <span>点击下方按钮解锁高清私照</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 终极跳转入口 -->
+    <div class="action-area">
+        <!-- 🔴 记住把下面的链接替换成你真实的 BeMob 追踪链接 🔴 -->
+        <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="btn-unlock" id="click-target">
+            接受私信并开启私密对话 ➔
+        </a>
     </div>
 </div>
 
 <script>
-    // 替换为你的 BeMob 追踪链接
+    // 替换为你的 BeMob Tracking URL
     const BEMOB_URL = "https://YOUR_BEMOB_TRACKING_URL_HERE.com";
-    document.getElementById('reply-btn').href = BEMOB_URL;
+    document.getElementById('click-target').href = BEMOB_URL;
 
-    // 模拟真实聊天的动态剧本
-    const chatSteps = [
-        { type: 'incoming', text: '嗨... 你刚才是不是在附近看我资料？ 👀', delay: 1000 },
-        { type: 'incoming', text: '我看你离我超级近，就顺手点进来了。', delay: 2500 },
-        { type: 'incoming', text: '一个人在家好无聊，你今晚有空过来坐坐吗？ 🍷', delay: 4500 },
-        { type: 'voice', text: '发送了一条语音消息 (0:14)', delay: 6500 },
-        { type: 'incoming', text: '这是我刚才拍的，不过只能看一眼哦... 👇', delay: 8500 }
-    ];
-
-    const chatStream = document.getElementById('chat-stream');
-    const typingIndicator = document.getElementById('typing');
-    const replyBtn = document.getElementById('reply-btn');
-
-    function getTimeString() {
-        const d = new Date();
-        return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
-    }
-
-    let currentStep = 0;
-
-    function playChat() {
-        if (currentStep < chatSteps.length) {
-            typingIndicator.style.display = 'block';
-            let step = chatSteps[currentStep];
-
-            setTimeout(() => {
-                typingIndicator.style.display = 'none';
-                let bubble = document.createElement('div');
-                bubble.className = `bubble incoming`;
-
-                if (step.type === 'voice') {
-                    bubble.innerHTML = `
-                        <div class="voice-msg">
-                            <div class="play-btn">▶</div>
-                            <span>语音消息 [0:14]</span>
-                        </div>
-                        <span class="timestamp">${getTimeString()}</span>
-                    `;
-                } else {
-                    bubble.innerHTML = `${step.text} <span class="timestamp">${getTimeString()}</span>`;
-                }
-
-                chatStream.appendChild(bubble);
-                chatStream.scrollTop = chatStream.scrollHeight;
-
-                currentStep++;
-                playChat();
-            }, step.delay - (currentStep === 0 ? 0 : chatSteps[currentStep - 1].delay));
-        } else {
-            // 剧本走完，显示强转化按钮
-            setTimeout(() => {
-                typingIndicator.style.display = 'none';
-                replyBtn.style.display = 'block';
-                if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
-            }, 1000);
-        }
-    }
-
-    // 页面加载后触发震动并开始播放聊天剧本
+    // 自动抓取 IP 伪装真实区域
     window.onload = function() {
-        if ("vibrate" in navigator) navigator.vibrate(100);
-        setTimeout(playChat, 500);
+        if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
+        
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                const city = data.city || "您所在区域";
+                document.getElementById('radar-text').innerText = `🛰️ 已锁定 [${city}] 1.5km 范围内的私密会话`;
+            })
+            .catch(() => {
+                document.getElementById('radar-text').innerText = `🛰️ 已锁定您附近 1.5km 范围内的私密会话`;
+            });
     };
 </script>
 </body>
