@@ -3,156 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>加密通道匹配中...</title>
+    <title>Private Chat - Live</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
-        .card { background: #1e293b; border-radius: 16px; border: 1px solid #334155; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; position: relative; overflow: hidden; }
-        .notify-bar { background: #e11d48; color: #fff; font-size: 13px; font-weight: bold; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .avatar-box { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; }
-        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #f43f5e; }
-        .online-badge { position: absolute; bottom: 2px; right: 2px; width: 18px; height: 18px; background: #22c55e; border: 2px solid #1e293b; border-radius: 50%; }
-        h2 { font-size: 18px; margin-bottom: 10px; color: #fff; }
-        p.subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
-        .step { display: none; }
-        .step.active { display: block; }
-        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .btn { background: #f43f5e; color: #fff; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s, transform 0.1s; width: 100%; text-decoration: none; display: block; }
-        .btn:active { transform: scale(0.98); background: #e11d48; }
-        .btn-secondary { background: #334155; color: #cbd5e1; }
-        .progress-bar { width: 100%; background: #334155; height: 10px; border-radius: 5px; overflow: hidden; margin: 15px 0; }
-        .progress-fill { width: 0%; height: 100%; background: #f43f5e; transition: width 0.3s ease; }
-        .timer { font-size: 20px; font-weight: bold; color: #fbbf24; margin: 10px 0; }
+        body { background-color: #0b0f19; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
+        .phone-frame { background: #121824; border-radius: 24px; border: 2px solid #2a3447; width: 100%; max-width: 380px; padding: 15px; box-shadow: 0 15px 35px rgba(244,63,94,0.15); position: relative; overflow: hidden; }
+        
+        /* 顶部通知栏 */
+        .top-bar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #1f293d; margin-bottom: 15px; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar-wrap { position: relative; width: 44px; height: 44px; }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #f43f5e; }
+        .status-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #22c55e; border: 2px solid #121824; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .name-tag h3 { font-size: 15px; font-weight: bold; color: #fff; }
+        .name-tag p { font-size: 11px; color: #f43f5e; }
+
+        /* 视窗背景（大图诱惑区） */
+        .media-preview { position: relative; width: 100%; height: 260px; border-radius: 14px; overflow: hidden; margin-bottom: 15px; background: #000; }
+        .media-preview img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); }
+        .blur-overlay { position: absolute; inset: 0; backdrop-filter: blur(12px); background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .lock-icon { font-size: 32px; margin-bottom: 8px; }
+
+        /* 聊天气泡区 */
+        .chat-bubble { background: #1e293b; padding: 12px 15px; border-radius: 12px; font-size: 14px; line-height: 1.4; margin-bottom: 15px; border-left: 3px solid #f43f5e; }
+        .chat-bubble span { color: #f43f5e; font-weight: bold; }
+
+        /* 互动按钮 */
+        .btn { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); color: #fff; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; text-decoration: none; display: block; text-align: center; box-shadow: 0 4px 15px rgba(244,63,94,0.4); animation: pulse-btn 1.5s infinite; }
+        @keyframes pulse-btn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+        .timer-box { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 10px; }
+        .timer-box span { color: #fbbf24; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <!-- 顶部伪装系统通知 -->
-    <div class="notify-bar">
-        <span>⚠️</span> <span id="geo-text">定位中... 发现附近有人求助</span>
+<div class="phone-frame">
+    <!-- 顶部：伪装真实本地用户 -->
+    <div class="top-bar">
+        <div class="user-info">
+            <div class="avatar-wrap">
+                <!-- 替换为更具视觉冲击力的真人素人头像 -->
+                <img class="avatar" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80" alt="User">
+                <div class="status-dot"></div>
+            </div>
+            <div class="name-tag">
+                <h3 id="local-user">Natasha (距离 800m)</h3>
+                <p>刚刚在线 • 正在发来语音</p>
+            </div>
+        </div>
+        <div style="font-size: 18px;">🔥</div>
     </div>
 
-    <!-- 伪装头像 -->
-    <div class="avatar-box">
-        <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Avatar">
-        <div class="online-badge"></div>
-    </div>
-
-    <!-- Step 1: 第一个选项（制造点击占有感） -->
-    <div class="step active" id="step-1">
-        <h2>系统检测到 1 放置在您附近的私密邀请</h2>
-        <p class="subtitle">请问您今年是否已满 18 周岁？</p>
-        <div class="btn-group">
-            <button class="btn" onclick="nextStep(2)">是的，我已满 18 岁</button>
-            <button class="btn btn-secondary" onclick="nextStep(2)">未满 18 岁</button>
+    <!-- 中间：动态高斯模糊诱惑图 (视觉抓眼球) -->
+    <div class="media-preview">
+        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80" alt="Preview">
+        <div class="blur-overlay">
+            <div class="lock-icon">🔒</div>
+            <p style="font-size: 13px; font-weight: bold; margin-bottom: 4px;">私密视频与照片已锁定</p>
+            <p style="font-size: 11px; color: #cbd5e1;">完成年龄与地理位置校验即可解锁全部内容</p>
         </div>
     </div>
 
-    <!-- Step 2: 第二个选项（沉没成本加码） -->
-    <div class="step" id="step-2">
-        <h2>您寻找的目的什么？</h2>
-        <p class="subtitle">以便系统为您精准匹配合适的人选</p>
-        <div class="btn-group">
-            <button class="btn" onclick="nextStep(3)">今晚线下约会</button>
-            <button class="btn" onclick="nextStep(3)">在线私密视频聊天</button>
-        </div>
+    <!-- 底部：聊天气泡文案 -->
+    <div class="chat-bubble">
+        “我在家洗完澡了，今晚一个人好无聊... 离你只有不到 1 公里，要不要过来陪我？ <span>[点击查看私密聊天]</span>”
     </div>
 
-    <!-- Step 3: 伪装加载逻辑 -->
-    <div class="step" id="step-3">
-        <h2>正在为您建立安全加密通道...</h2>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progress"></div>
-        </div>
-        <p class="subtitle" id="status-text">匹配本地活跃用户中...</p>
-    </div>
+    <!-- 强转化按钮（直连 BeMob 链接） -->
+    <!-- 🔴 记得把下方的链接换成你的 BeMob 追踪链接 🔴 -->
+    <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="btn">解锁与她私密对话 ➔</a>
 
-    <!-- Step 4: 临门一脚，引导高压转化 -->
-    <div class="step" id="step-4">
-        <h2 style="color: #22c55e;">🎉 匹配成功！</h2>
-        <p class="subtitle">通道已为您保留，请在计时结束前完成身份验证：</p>
-        <div class="timer" id="countdown">02:59</div>
-        <!-- 🔴 注意：把下面的替换成你的 BeMob 追踪链接 🔴 -->
-        <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="btn" id="final-btn">立即进入私密房间</a>
+    <div class="timer-box">
+        ⚠️ 匹配名额仅为为您保留：<span id="countdown">02:59</span>
     </div>
 </div>
 
 <script>
-    // 1. 替换你从 BeMob 生成的 Campaign 链接
-    const BEMOB_URL = "https://YOUR_BEMOB_TRACKING_URL_HERE.com"; 
-
-    // 2. 页面加载自动触发震动与声音条件反射（需配合交互）
+    // 手机震动触发
     window.onload = function() {
         if ("vibrate" in navigator) {
-            navigator.vibrate([200, 100, 200]);
+            navigator.vibrate([300, 100, 300]);
         }
-        fetchGeo();
+        startTimer(179);
     };
 
-    // 3. 前端获取访客 IP 城市并强行注入通知
-    function fetchGeo() {
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(data => {
-                const city = data.city || "您所在区域";
-                document.getElementById('geo-text').innerText = `发现位于 [${city}] 的用户发送了私信`;
-            })
-            .catch(() => {
-                document.getElementById('geo-text').innerText = `发现离您距离不到 1.5km 的用户私信`;
-            });
-    }
-
-    // 4. 漏斗步骤切换
-    function nextStep(stepNum) {
-        if ("vibrate" in navigator) navigator.vibrate(50);
-        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-        document.getElementById(`step-${stepNum}`).classList.add('active');
-
-        if (stepNum === 3) {
-            startLoading();
-        }
-    }
-
-    // 5. 99% 停顿的伪装加载条
-    function startLoading() {
-        let fill = document.getElementById('progress');
-        let status = document.getElementById('status-text');
-        let width = 0;
-        let interval = setInterval(() => {
-            if (width >= 90) {
-                clearInterval(interval);
-                status.innerText = "正在锁定最终通信通道...";
-                setTimeout(() => {
-                    fill.style.width = '100%';
-                    nextStep(4);
-                    startTimer(179); // 启动 2分59秒 倒计时
-                }, 800);
-            } else {
-                width += Math.floor(Math.random() * 25) + 10;
-                fill.style.width = width + '%';
-            }
-        }, 200);
-    }
-
-    // 6. 损失厌恶倒计时
+    // 倒计时逻辑
     function startTimer(duration) {
         let timer = duration, minutes, seconds;
         let display = document.getElementById('countdown');
         let countdownInterval = setInterval(function () {
             minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
-
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-
             display.textContent = minutes + ":" + seconds;
-
             if (--timer < 0) {
                 clearInterval(countdownInterval);
-                display.textContent = "00:00 - 已超时";
-                display.style.color = "#ef4444";
+                display.textContent = "00:00 (已失效)";
             }
         }, 1000);
     }
