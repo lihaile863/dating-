@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>加密通道匹配中...</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        .card { background: #1e293b; border-radius: 16px; border: 1px solid #334155; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; position: relative; overflow: hidden; }
+        .notify-bar { background: #e11d48; color: #fff; font-size: 13px; font-weight: bold; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .avatar-box { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #f43f5e; }
+        .online-badge { position: absolute; bottom: 2px; right: 2px; width: 18px; height: 18px; background: #22c55e; border: 2px solid #1e293b; border-radius: 50%; }
+        h2 { font-size: 18px; margin-bottom: 10px; color: #fff; }
+        p.subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .btn { background: #f43f5e; color: #fff; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s, transform 0.1s; width: 100%; text-decoration: none; display: block; }
+        .btn:active { transform: scale(0.98); background: #e11d48; }
+        .btn-secondary { background: #334155; color: #cbd5e1; }
+        .progress-bar { width: 100%; background: #334155; height: 10px; border-radius: 5px; overflow: hidden; margin: 15px 0; }
+        .progress-fill { width: 0%; height: 100%; background: #f43f5e; transition: width 0.3s ease; }
+        .timer { font-size: 20px; font-weight: bold; color: #fbbf24; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <!-- 顶部伪装系统通知 -->
+    <div class="notify-bar">
+        <span>⚠️</span> <span id="geo-text">定位中... 发现附近有人求助</span>
+    </div>
+
+    <!-- 伪装头像 -->
+    <div class="avatar-box">
+        <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Avatar">
+        <div class="online-badge"></div>
+    </div>
+
+    <!-- Step 1: 第一个选项（制造点击占有感） -->
+    <div class="step active" id="step-1">
+        <h2>系统检测到 1 放置在您附近的私密邀请</h2>
+        <p class="subtitle">请问您今年是否已满 18 周岁？</p>
+        <div class="btn-group">
+            <button class="btn" onclick="nextStep(2)">是的，我已满 18 岁</button>
+            <button class="btn btn-secondary" onclick="nextStep(2)">未满 18 岁</button>
+        </div>
+    </div>
+
+    <!-- Step 2: 第二个选项（沉没成本加码） -->
+    <div class="step" id="step-2">
+        <h2>您寻找的目的什么？</h2>
+        <p class="subtitle">以便系统为您精准匹配合适的人选</p>
+        <div class="btn-group">
+            <button class="btn" onclick="nextStep(3)">今晚线下约会</button>
+            <button class="btn" onclick="nextStep(3)">在线私密视频聊天</button>
+        </div>
+    </div>
+
+    <!-- Step 3: 伪装加载逻辑 -->
+    <div class="step" id="step-3">
+        <h2>正在为您建立安全加密通道...</h2>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        <p class="subtitle" id="status-text">匹配本地活跃用户中...</p>
+    </div>
+
+    <!-- Step 4: 临门一脚，引导高压转化 -->
+    <div class="step" id="step-4">
+        <h2 style="color: #22c55e;">🎉 匹配成功！</h2>
+        <p class="subtitle">通道已为您保留，请在计时结束前完成身份验证：</p>
+        <div class="timer" id="countdown">02:59</div>
+        <!-- 🔴 注意：把下面的替换成你的 BeMob 追踪链接 🔴 -->
+        <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="btn" id="final-btn">立即进入私密房间</a>
+    </div>
+</div>
+
+<script>
+    // 1. 替换你从 BeMob 生成的 Campaign 链接
+    const BEMOB_URL = "https://YOUR_BEMOB_TRACKING_URL_HERE.com"; 
+
+    // 2. 页面加载自动触发震动与声音条件反射（需配合交互）
+    window.onload = function() {
+        if ("vibrate" in navigator) {
+            navigator.vibrate([200, 100, 200]);
+        }
+        fetchGeo();
+    };
+
+    // 3. 前端获取访客 IP 城市并强行注入通知
+    function fetchGeo() {
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                const city = data.city || "您所在区域";
+                document.getElementById('geo-text').innerText = `发现位于 [${city}] 的用户发送了私信`;
+            })
+            .catch(() => {
+                document.getElementById('geo-text').innerText = `发现离您距离不到 1.5km 的用户私信`;
+            });
+    }
+
+    // 4. 漏斗步骤切换
+    function nextStep(stepNum) {
+        if ("vibrate" in navigator) navigator.vibrate(50);
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        document.getElementById(`step-${stepNum}`).classList.add('active');
+
+        if (stepNum === 3) {
+            startLoading();
+        }
+    }
+
+    // 5. 99% 停顿的伪装加载条
+    function startLoading() {
+        let fill = document.getElementById('progress');
+        let status = document.getElementById('status-text');
+        let width = 0;
+        let interval = setInterval(() => {
+            if (width >= 90) {
+                clearInterval(interval);
+                status.innerText = "正在锁定最终通信通道...";
+                setTimeout(() => {
+                    fill.style.width = '100%';
+                    nextStep(4);
+                    startTimer(179); // 启动 2分59秒 倒计时
+                }, 800);
+            } else {
+                width += Math.floor(Math.random() * 25) + 10;
+                fill.style.width = width + '%';
+            }
+        }, 200);
+    }
+
+    // 6. 损失厌恶倒计时
+    function startTimer(duration) {
+        let timer = duration, minutes, seconds;
+        let display = document.getElementById('countdown');
+        let countdownInterval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(countdownInterval);
+                display.textContent = "00:00 - 已超时";
+                display.style.color = "#ef4444";
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>
