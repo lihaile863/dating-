@@ -3,110 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chat Radar Active</title>
+    <title>Private Door View</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #0b141a; color: #e9edef; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .app-container { width: 100%; max-width: 410px; height: 100vh; background: #111b21; display: flex; flex-direction: column; position: relative; }
+        body { background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        
+        .viewport { width: 100%; max-width: 410px; height: 100vh; background: #08080c; display: flex; flex-direction: column; position: relative; overflow: hidden; }
         @media (min-height: 650px) {
-            .app-container { height: 720px; border-radius: 20px; border: 1px solid #222d34; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+            .viewport { height: 720px; border-radius: 20px; border: 1px solid #1f2937; }
         }
 
-        /* 顶部黑帽私信头栏 */
-        .app-header { background: #202c33; padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #222d34; }
-        .avatar-box { position: relative; width: 44px; height: 44px; }
-        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #00a884; }
-        .online-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #00a884; border: 2px solid #202c33; border-radius: 50%; }
-        .header-text h3 { font-size: 15px; font-weight: 600; color: #e9edef; }
-        .header-text p { font-size: 12px; color: #00a884; }
+        /* 顶部偷窥提示 */
+        .spy-header { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(8px); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 20; position: absolute; top: 0; left: 0; right: 0; }
+        .live-tag { background: #ef4444; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 10px; display: flex; align-items: center; gap: 4px; }
+        .live-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 雷达扫描诱惑区 */
-        .radar-box { position: relative; width: 100%; height: 200px; background: #0b141a; display: flex; justify-content: center; align-items: center; overflow: hidden; border-bottom: 1px solid #222d34; }
-        .radar-sweep { position: absolute; width: 300px; height: 300px; background: conic-gradient(from 0deg, rgba(0, 168, 132, 0.4) 0deg, transparent 60deg); border-radius: 50%; animation: spin 2.5s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .radar-circle { position: absolute; border: 1px solid rgba(0, 168, 132, 0.2); border-radius: 50%; }
-        .radar-status { position: absolute; bottom: 10px; background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 12px; font-size: 11px; color: #8696a0; }
-
-        /* 模拟消息流 */
-        .chat-body { flex: 1; padding: 15px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
-        .msg-bubble { background: #202c33; padding: 12px; border-radius: 8px; border-top-left-radius: 0; max-width: 85%; font-size: 14px; position: relative; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* 3D 第一视角推门舞台 */
+        .door-scene { position: relative; width: 100%; height: 65%; overflow: hidden; perspective: 1000px; background: #000; }
         
-        /* 毛玻璃模糊图（刺激窥探欲） */
-        .blur-media { position: relative; margin-top: 8px; border-radius: 6px; overflow: hidden; height: 140px; }
-        .blur-media img { width: 100%; height: 100%; object-fit: cover; filter: blur(14px); }
-        .lock-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; font-weight: bold; color: #fff; }
+        /* 房间内部视觉（随着门打开逐渐推近放大） */
+        .room-inner { position: absolute; inset: 0; width: 100%; height: 100%; background-size: cover; background-position: center; animation: zoomInCamera 8s ease-out forwards; filter: brightness(0.85); }
+        .room-inner img { width: 100%; height: 100%; object-fit: cover; filter: blur(4px); } /* 轻微高斯模糊制造窥探隐秘感 */
+        
+        @keyframes zoomInCamera {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); } /* 缓缓推近视觉 */
+        }
+
+        /* 门缝遮罩动画（从两边缓缓拉开，营造从门缝探头进去的镜头感） */
+        .door-leaf-left, .door-leaf-right { position: absolute; top: 0; bottom: 0; width: 50%; background: #050508; z-index: 10; transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .door-leaf-left { left: 0; border-right: 2px solid #111; transform-origin: left; }
+        .door-leaf-right { right: 0; border-left: 2px solid #111; transform-origin: right; }
+        
+        /* 门打开时的动画状态 */
+        .door-scene.open .door-leaf-left { transform: translateX(-88%); }
+        .door-scene.open .door-leaf-right { transform: translateX(88%); }
+
+        /* 窥探锁与提示 */
+        .spy-overlay { position: absolute; inset: 0; z-index: 15; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, transparent 70%); }
+        
+        .chat-bubble { background: rgba(31, 41, 55, 0.9); border-left: 3px solid #f43f5e; padding: 10px 14px; border-radius: 8px; font-size: 13px; line-height: 1.4; color: #f3f4f6; margin-bottom: 12px; }
+        .chat-bubble span { color: #f43f5e; font-weight: bold; }
 
         /* 强转化按钮 */
-        .action-area { padding: 15px; background: #202c33; display: flex; flex-direction: column; gap: 8px; }
-        .btn-unlock { background: #00a884; color: #111b21; border: none; padding: 14px; border-radius: 24px; font-size: 16px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 12px rgba(0,168,132,0.3); animation: pulseBtn 1.5s infinite; }
-        @keyframes pulseBtn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        .btn-unlock { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); color: #fff; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 20px rgba(244,63,94,0.4); animation: breathe 1.5s infinite; }
+        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <!-- 1. 高仿社交软件头部 -->
-    <div class="app-header">
-        <div class="avatar-box">
-            <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Local User">
-            <div class="online-dot"></div>
-        </div>
-        <div class="header-text">
-            <h3 id="target-name">Elena (距离约 600m)</h3>
-            <p id="sub-status">🟢 正在等待您的回复...</p>
-        </div>
+<div class="viewport">
+    <!-- 顶部状态 -->
+    <div class="spy-header">
+        <div style="font-size: 13px; font-weight: bold; color: #e5e7eb;" id="geo-title">隔壁房间 (距您 50m)</div>
+        <div class="live-tag"><div class="live-dot"></div> 实时连线中</div>
     </div>
 
-    <!-- 2. 动态雷达指示（营造真实匹配感） -->
-    <div class="radar-box">
-        <div class="radar-circle" style="width: 80px; height: 80px;"></div>
-        <div class="radar-circle" style="width: 160px; height: 160px;"></div>
-        <div class="radar-sweep"></div>
-        <div class="radar-status" id="radar-text">🛰️ 雷达定位中：锁定您当前区域的私信</div>
-    </div>
+    <!-- 3D 门缝镜头场景 -->
+    <div class="door-scene" id="doorScene">
+        <!-- 门缝左遮罩 -->
+        <div class="door-leaf-left"></div>
+        <!-- 门缝右遮罩 -->
+        <div class="door-leaf-right"></div>
+        
+        <!-- 房间内部：第一视角背景图/GIF -->
+        <div class="room-inner">
+            <!-- 建议替换为具有极强动态隐秘感或擦边自拍视角的 WebP/GIF 动态图 -->
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80" alt="Inside Room">
+        </div>
 
-    <!-- 3. 私密对话流 -->
-    <div class="chat-body">
-        <div class="msg-bubble">
-            “你也在附近吗？我看到系统提示你的位置了... 刚好今晚一个人，要不要交换一下私密照片？”
-            <div class="blur-media">
-                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80" alt="Private Preview">
-                <div class="lock-overlay">
-                    <span style="font-size: 20px;">🔒</span>
-                    <span>点击下方按钮解锁高清私照</span>
-                </div>
+        <!-- 偷窥界面遮罩与提示 -->
+        <div class="spy-overlay">
+            <div class="chat-bubble" id="spy-text">
+                “房门没锁... 我在床上等你，进门记得轻点...” <span>[偷窥视角已锁定]</span>
             </div>
+            
+            <!-- 🔴 替换为你的 BeMob 追踪链接 🔴 -->
+            <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="btn-unlock" id="click-target">
+                推门进入私密房间 ➔
+            </a>
         </div>
-    </div>
-
-    <!-- 4. 终极跳转入口 -->
-    <div class="action-area">
-        <!-- 🔴 记住把下面的链接替换成你真实的 BeMob 追踪链接 🔴 -->
-        <a href="https://YOUR_BEMOB_TRACKING_URL_HERE.com" class="btn-unlock" id="click-target">
-            接受私信并开启私密对话 ➔
-        </a>
     </div>
 </div>
 
 <script>
-    // 替换为你的 BeMob Tracking URL
     const BEMOB_URL = "https://YOUR_BEMOB_TRACKING_URL_HERE.com";
     document.getElementById('click-target').href = BEMOB_URL;
 
-    // 自动抓取 IP 伪装真实区域
     window.onload = function() {
-        if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
-        
+        // 1. 触发手机震动（模拟手握门把手的感觉）
+        if ("vibrate" in navigator) navigator.vibrate([150, 80, 150]);
+
+        // 2. 延迟 0.6 秒自动执行“缓推房门”动画
+        setTimeout(() => {
+            document.getElementById('doorScene').classList.add('open');
+        }, 600);
+
+        // 3. 动态抓取城市拼入
         fetch('https://ipapi.co/json/')
             .then(res => res.json())
             .then(data => {
-                const city = data.city || "您所在区域";
-                document.getElementById('radar-text').innerText = `🛰️ 已锁定 [${city}] 1.5km 范围内的私密会话`;
+                const city = data.city || "隔壁";
+                document.getElementById('geo-title').innerText = `[${city}] 隔壁房间 · 门未锁`;
             })
-            .catch(() => {
-                document.getElementById('radar-text').innerText = `🛰️ 已锁定您附近 1.5km 范围内的私密会话`;
-            });
+            .catch(() => {});
     };
 </script>
 </body>
