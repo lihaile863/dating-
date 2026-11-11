@@ -11,19 +11,19 @@
         .container { width: 100%; max-width: 420px; background: #111827; border-radius: 16px; border: 1px solid #1f2937; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
 
         /* 顶部横幅 */
-        .header-banner { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 20px; border-bottom: 1px solid #374151; }
+        .header-banner { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 18px 20px; border-bottom: 1px solid #374151; }
         .badge { display: inline-block; background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .header-banner h1 { font-size: 17px; font-weight: 700; line-height: 1.4; color: #fff; margin-bottom: 6px; }
-        .header-banner p { font-size: 13px; color: #9ca3af; }
+        .header-banner h1 { font-size: 16px; font-weight: 700; line-height: 1.4; color: #fff; margin-bottom: 6px; }
+        .header-banner p { font-size: 12px; color: #9ca3af; }
 
         /* 内容主体区 */
-        .content { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+        .content { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
 
-        /* 动态终端框（模拟实盘滚动） */
-        .terminal-box { background: #030712; border: 1px solid #374151; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 11px; color: #34d399; line-height: 1.5; height: 115px; overflow: hidden; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
-        .terminal-scroll { display: flex; flex-direction: column; gap: 4px; animation: slideUp 12s linear infinite; }
+        /* 动态终端框（修复布局挤压问题） */
+        .terminal-box { background: #030712; border: 1px solid #374151; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: #34d399; line-height: 1.6; height: 110px; overflow: hidden; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+        .terminal-scroll { position: absolute; left: 10px; right: 10px; top: 10px; display: flex; flex-direction: column; gap: 2px; animation: slideUp 10s linear infinite; }
         
-        /* 从下往上无限滚动动画 */
+        /* 平滑滚动动画 */
         @keyframes slideUp {
             0% { transform: translateY(0); }
             100% { transform: translateY(-50%); }
@@ -35,28 +35,27 @@
         .terminal-line.success { color: #60a5fa; }
         .terminal-line.profit { color: #10b981; font-weight: bold; }
 
-        /* 核心卡片：精选外包专家 */
-        .dev-card { background: #1f2937; border-radius: 10px; padding: 14px; border: 1px solid #374151; display: flex; flex-direction: column; gap: 10px; }
-        .dev-info h3 { font-size: 14px; font-weight: bold; color: #fff; display: flex; justify-content: space-between; }
-        .dev-info h3 span { color: #f59e0b; font-size: 12px; }
-        .dev-info p { font-size: 12px; color: #9ca3af; line-height: 1.4; }
-
-        /* 强转化按钮（呼吸动效） */
-        .btn-fiverr { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 15px rgba(16,185,129,0.3); animation: breatheBtn 1.5s infinite; }
-        @keyframes breatheBtn { 0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(16,185,129,0.3); } 50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(16,185,129,0.5); } }
-        .btn-fiverr:active { transform: scale(0.98); }
-
-        /* 折叠说明书区域 */
-        .spec-box { background: #1a2234; border-radius: 8px; padding: 12px; font-size: 12px; color: #9ca3af; line-height: 1.5; border-left: 3px solid #3b82f6; }
+        /* 提示卡片 */
+        .spec-box { background: #1a2234; border-radius: 8px; padding: 10px 12px; font-size: 12px; color: #9ca3af; line-height: 1.4; border-left: 3px solid #3b82f6; }
         .spec-box b { color: #e5e7eb; }
 
-        .footer-tip { text-align: center; font-size: 11px; color: #4b5563; padding: 10px 0; }
+        /* 核心卡片：精选外包专家 */
+        .dev-card { background: #1f2937; border-radius: 10px; padding: 14px; border: 1px solid #374151; display: flex; flex-direction: column; gap: 10px; }
+        .dev-info h3 { font-size: 13px; font-weight: bold; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+        .dev-info h3 span { color: #f59e0b; font-size: 11px; }
+        .dev-info p { font-size: 12px; color: #9ca3af; line-height: 1.4; margin-top: 4px; }
+
+        /* 强转化按钮 */
+        .btn-fiverr { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 15px rgba(16,185,129,0.3); animation: breatheBtn 1.5s infinite; }
+        @keyframes breatheBtn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+        .footer-tip { text-align: center; font-size: 10px; color: #4b5563; padding: 6px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- 顶部横幅 -->
+    <!-- 1. 顶部横幅 -->
     <div class="header-banner">
         <div class="badge">🔥 实盘验证 · 24H 无人值守</div>
         <h1>“别再自己熬夜硬啃代码了，量化交给我，底层交给专业外包。”</h1>
@@ -64,19 +63,73 @@
     </div>
 
     <div class="content">
-        <!-- 动态终端日志框（实现无缝循环滚动） -->
+        <!-- 2. 动态终端日志框 -->
         <div class="terminal-box">
-            <div class="terminal-scroll" id="terminalLog">
-                <!-- 第一轮输出 -->
+            <div class="terminal-scroll">
                 <div class="terminal-line dim">> initializing quant_engine v2.4...</div>
                 <div class="terminal-line">> connecting to node websocket (latency: <span class="hl">12ms</span>)...</div>
                 <div class="terminal-line dim">> [SCAN] monitoring mempool spreads...</div>
                 <div class="terminal-line success">> [SUCCESS] Arbitrage Executed | Pair: SOL/USDC</div>
-                <div class="terminal-line profit" id="profit-1">> [PROFIT] +$42.50 USD (Gas: 0.0005 SOL)</div>
+                <div class="terminal-line profit" id="p1">> [PROFIT] +$42.50 USD (Gas: 0.0005 SOL)</div>
                 <div class="terminal-line dim">> [SCAN] checking liquidity pools...</div>
                 <div class="terminal-line success">> [SUCCESS] Arbitrage Executed | Pair: ETH/USDT</div>
-                <div class="terminal-line profit" id="profit-2">> [PROFIT] +$88.20 USD (Gas: 0.0012 ETH)</div>
-                
-                <!-- 无缝循环冗余（确保滚动时没有断层） -->
+                <div class="terminal-line profit" id="p2">> [PROFIT] +$88.20 USD (Gas: 0.0012 ETH)</div>
+                <!-- 循环副本 -->
                 <div class="terminal-line dim">> initializing quant_engine v2.4...</div>
-                <div class="terminal-line">> connecting to node
+                <div class="terminal-line">> connecting to node websocket (latency: <span class="hl">12ms</span>)...</div>
+                <div class="terminal-line dim">> [SCAN] monitoring mempool spreads...</div>
+                <div class="terminal-line success">> [SUCCESS] Arbitrage Executed | Pair: SOL/USDC</div>
+                <div class="terminal-line profit">> [PROFIT] +$42.50 USD (Gas: 0.0005 SOL)</div>
+                <div class="terminal-line dim">> [SCAN] checking liquidity pools...</div>
+                <div class="terminal-line success">> [SUCCESS] Arbitrage Executed | Pair: ETH/USDT</div>
+                <div class="terminal-line profit">> [PROFIT] +$88.20 USD (Gas: 0.0012 ETH)</div>
+            </div>
+        </div>
+
+        <!-- 3. 省钱提示框 -->
+        <div class="spec-box">
+            <b>💡 核心省钱秘籍：</b>
+            点击下方专家时，直接把需求写明（如：<i>“API对接 + 自动化执行 + 风险熔断”</i>），他们有现成框架，24小时即可交付源码。
+        </div>
+
+        <!-- 4. 推荐开发者卡片 1 -->
+        <div class="dev-card">
+            <div class="dev-info">
+                <h3>Senior Python & Crypto Dev <span>⭐ 4.9 (320+ Orders)</span></h3>
+                <p>专精高性能 API 接入、高频交易 Bot 与自动化脚本定制，交付极快，支持全套源码交接。</p>
+            </div>
+            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_1" class="btn-fiverr" target="_blank">
+                获取该开发者联系方式 & 定制同款 ➔
+            </a>
+        </div>
+
+        <!-- 5. 推荐开发者卡片 2 -->
+        <div class="dev-card">
+            <div class="dev-info">
+                <h3>Full-Stack & Web Automation <span>⭐ 5.0 (180+ Orders)</span></h3>
+                <p>擅长搞定各种反爬、Webhook 消息推送、以及 24 小时云端服务器 (VPS) 部署挂机方案。</p>
+            </div>
+            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_2" class="btn-fiverr" target="_blank">
+                查看专家主页并获取最低报价 ➔
+            </a>
+        </div>
+
+        <div class="footer-tip">
+            Disclaimer: Affiliate links included. We may earn a commission at no extra cost to you.
+        </div>
+    </div>
+</div>
+
+<script>
+    setInterval(() => {
+        const r1 = (Math.random() * 30 + 35).toFixed(2);
+        const r2 = (Math.random() * 50 + 60).toFixed(2);
+        const p1 = document.getElementById('p1');
+        const p2 = document.getElementById('p2');
+        if(p1) p1.innerHTML = `> [PROFIT] +$${r1} USD (Gas: 0.0005 SOL)`;
+        if(p2) p2.innerHTML = `> [PROFIT] +$${r2} USD (Gas: 0.0012 ETH)`;
+    }, 3000);
+</script>
+
+</body>
+</html>
