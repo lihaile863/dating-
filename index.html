@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,12 +8,16 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #0b0f19; color: #f3f4f6; display: flex; justify-content: center; min-height: 100vh; padding: 12px; }
         
-        .container { width: 100%; max-width: 420px; background: #111827; border-radius: 16px; border: 1px solid #1f2937; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+        .container { width: 100%; max-width: 420px; background: #111827; border-radius: 16px; border: 1px solid #1f2937; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.8); position: relative; }
+
+        /* 顶部导航与语言切换 */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 11px; }
+        .lang-select { background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 3px 6px; border-radius: 4px; cursor: pointer; }
 
         /* 顶部横幅 */
-        .header-banner { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 18px 20px; border-bottom: 1px solid #374151; }
+        .header-banner { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 16px 20px; border-bottom: 1px solid #374151; }
         .badge { display: inline-block; background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .header-banner h1 { font-size: 16px; font-weight: 700; line-height: 1.4; color: #fff; margin-bottom: 6px; }
+        .header-banner h1 { font-size: 15px; font-weight: 700; line-height: 1.4; color: #fff; margin-bottom: 6px; }
         .header-banner p { font-size: 12px; color: #9ca3af; }
 
         /* 内容主体区 */
@@ -30,10 +34,10 @@
         .terminal-line.success { color: #60a5fa; }
         .terminal-line.profit { color: #10b981; font-weight: bold; }
 
-        /* 沟通话术指导卡片（解决你提到的“带着需求去找”痛点） */
+        /* 沟通话术指导卡片 */
         .guide-box { background: #1a2234; border-radius: 8px; padding: 12px; font-size: 12px; color: #9ca3af; line-height: 1.5; border-left: 3px solid #10b981; }
         .guide-box b { color: #fff; display: block; margin-bottom: 4px; }
-        .prompt-snippet { background: #0b0f19; border: 1px dashed #374151; padding: 8px; border-radius: 6px; color: #34d399; margin-top: 6px; font-family: monospace; font-size: 11px; }
+        .prompt-snippet { background: #0b0f19; border: 1px dashed #374151; padding: 8px; border-radius: 6px; color: #34d399; margin-top: 6px; font-family: monospace; font-size: 11px; word-break: break-all; }
 
         /* 核心卡片：精选外包专家 */
         .dev-card { background: #1f2937; border-radius: 10px; padding: 14px; border: 1px solid #374151; display: flex; flex-direction: column; gap: 10px; }
@@ -51,15 +55,26 @@
 <body>
 
 <div class="container">
-    <!-- 1. 顶部横幅 -->
+    <!-- 顶部语种切换与 IP 状态栏 -->
+    <div class="top-bar">
+        <span id="ip-status">🌐 IP Auto-Detect</span>
+        <select class="lang-select" id="langSwitcher" onchange="changeLanguage(this.value)">
+            <option value="en">English (Global)</option>
+            <option value="th">ภาษาไทย (Thailand)</option>
+            <option value="pt">Português (Brazil)</option>
+            <option value="es">Español (LATAM)</option>
+        </select>
+    </div>
+
+    <!-- 顶部横幅 -->
     <div class="header-banner">
-        <div class="badge">🔥 实盘验证 · 24H 无人值守</div>
-        <h1>“别去问‘有没有包赚的软件’，直接把需求交给专业外包。”</h1>
-        <p>这是我定制自动化量化 Bot 的实盘日志。用正确的姿势提需求，才能让开发者 24 小时内完美交付。</p>
+        <div class="badge" data-i18n="badge">🔥 Live Verified · 24/7 Automated</div>
+        <h1 data-i18n="title">“Stop wasting months writing code. Delegate execution to pros.”</h1>
+        <p data-i18n="desc">Real operational log & vetted developer list for automated arbitrage bots.</p>
     </div>
 
     <div class="content">
-        <!-- 2. 动态终端日志框 -->
+        <!-- 动态终端日志框 -->
         <div class="terminal-box">
             <div class="terminal-scroll">
                 <div class="terminal-line dim">> initializing quant_engine v2.4...</div>
@@ -82,52 +97,29 @@
             </div>
         </div>
 
-        <!-- 3. 提需求话术指导（落地页核心亮点） -->
+        <!-- 提需求话术指导 -->
         <div class="guide-box">
-            <b>💡 聪明人的沟通话术（点击下方专家后直接发送）：</b>
-            <div class="prompt-snippet">
+            <b data-i18n="guideTitle">💡 Pro Prompt to send the developer:</b>
+            <div class="prompt-snippet" id="promptText">
                 "Hi, I need a lightweight Python trading bot script with WebSocket API integration, auto-execution, and basic risk management. Can you deliver this in 24h?"
             </div>
         </div>
 
-        <!-- 4. 推荐开发者卡片 1 -->
+        <!-- 推荐开发者卡片 1 -->
         <div class="dev-card">
             <div class="dev-info">
                 <h3>Senior Python & Crypto Dev <span>⭐ 4.9 (320+ Orders)</span></h3>
-                <p>专精高性能 API 接入、高频交易 Bot 与自动化脚本定制，交付极快，支持全套源码交接。</p>
+                <p data-i18n="dev1Desc">Specialized in high-performance API integration, custom crypto trading bots, and rapid source code delivery.</p>
             </div>
-            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_1" class="btn-fiverr" target="_blank">
-                联系该开发者并发送定制需求 ➔
+            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_1" class="btn-fiverr" target="_blank" data-i18n="btnText">
+                Contact & Send Requirements ➔
             </a>
         </div>
 
-        <!-- 5. 推荐开发者卡片 2 -->
+        <!-- 推荐开发者卡片 2 -->
         <div class="dev-card">
             <div class="dev-info">
                 <h3>Full-Stack & Web Automation <span>⭐ 5.0 (180+ Orders)</span></h3>
-                <p>擅长搞定各种反爬、Webhook 消息推送、以及 24 小时云端服务器 (VPS) 部署挂机方案。</p>
+                <p data-i18n="dev2Desc">Expert in bypass mechanisms, webhook push notifications, and 24/7 cloud VPS hosting deployment.</p>
             </div>
-            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_2" class="btn-fiverr" target="_blank">
-                联系专家主页并获取最低报价 ➔
-            </a>
-        </div>
-
-        <div class="footer-tip">
-            Disclaimer: Affiliate links included. We may earn a commission at no extra cost to you.
-        </div>
-    </div>
-</div>
-
-<script>
-    setInterval(() => {
-        const r1 = (Math.random() * 30 + 35).toFixed(2);
-        const r2 = (Math.random() * 50 + 60).toFixed(2);
-        const p1 = document.getElementById('p1');
-        const p2 = document.getElementById('p2');
-        if(p1) p1.innerHTML = `> [PROFIT] +$${r1} USD (Gas: 0.0005 SOL)`;
-        if(p2) p2.innerHTML = `> [PROFIT] +$${r2} USD (Gas: 0.0012 ETH)`;
-    }, 3000);
-</script>
-
-</body>
-</html>
+            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_2" class="btn-fiverr" target="_blank" data-i18n
