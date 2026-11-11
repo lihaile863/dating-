@@ -10,7 +10,7 @@
         
         .container { width: 100%; max-width: 420px; background: #111827; border-radius: 16px; border: 1px solid #1f2937; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
 
-        /* 顶部警示与战绩横幅 */
+        /* 顶部横幅 */
         .header-banner { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 20px; border-bottom: 1px solid #374151; }
         .badge { display: inline-block; background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
         .header-banner h1 { font-size: 17px; font-weight: 700; line-height: 1.4; color: #fff; margin-bottom: 6px; }
@@ -19,10 +19,21 @@
         /* 内容主体区 */
         .content { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
 
-        /* 终端模拟框（制造视觉冲击） */
-        .terminal-box { background: #030712; border: 1px solid #374151; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 11px; color: #34d399; line-height: 1.5; overflow-x: auto; }
-        .terminal-box .dim { color: #6b7280; }
-        .terminal-box .hl { color: #f43f5e; font-weight: bold; }
+        /* 动态终端框（模拟实盘滚动） */
+        .terminal-box { background: #030712; border: 1px solid #374151; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 11px; color: #34d399; line-height: 1.5; height: 115px; overflow: hidden; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+        .terminal-scroll { display: flex; flex-direction: column; gap: 4px; animation: slideUp 12s linear infinite; }
+        
+        /* 从下往上无限滚动动画 */
+        @keyframes slideUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        .terminal-line { white-space: nowrap; opacity: 0.9; }
+        .terminal-line.dim { color: #6b7280; }
+        .terminal-line.hl { color: #f43f5e; font-weight: bold; }
+        .terminal-line.success { color: #60a5fa; }
+        .terminal-line.profit { color: #10b981; font-weight: bold; }
 
         /* 核心卡片：精选外包专家 */
         .dev-card { background: #1f2937; border-radius: 10px; padding: 14px; border: 1px solid #374151; display: flex; flex-direction: column; gap: 10px; }
@@ -31,7 +42,8 @@
         .dev-info p { font-size: 12px; color: #9ca3af; line-height: 1.4; }
 
         /* 强转化按钮（呼吸动效） */
-        .btn-fiverr { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 15px rgba(16,185,129,0.3); transition: transform 0.2s; }
+        .btn-fiverr { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 15px rgba(16,185,129,0.3); animation: breatheBtn 1.5s infinite; }
+        @keyframes breatheBtn { 0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(16,185,129,0.3); } 50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(16,185,129,0.5); } }
         .btn-fiverr:active { transform: scale(0.98); }
 
         /* 折叠说明书区域 */
@@ -52,50 +64,19 @@
     </div>
 
     <div class="content">
-        <!-- 终端日志框 -->
+        <!-- 动态终端日志框（实现无缝循环滚动） -->
         <div class="terminal-box">
-            <span class="dim">> initializing quant_engine v2.4...</span><br>
-            > connecting to node websocket (latency: <span class="hl">12ms</span>)...<br>
-            <span class="dim">> [SCAN] monitoring mempool spreads...</span><br>
-            > <span style="color:#60a5fa;">[SUCCESS]</span> Arbitrage Executed | Pair: SOL/USDC<br>
-            > <span style="color:#10b981;">[PROFIT]</span> +$42.50 USD (Gas: 0.0005 SOL)
-        </div>
-
-        <!-- 需求白皮书提示 -->
-        <div class="spec-box">
-            <b>💡 核心省钱秘籍：</b>
-            不要直接找人盲目开发。点击下方专家时，直接把你在 Fiverr 上的定制需求写明（如：<i>“API对接 + 自动化执行 + 风险熔断”</i>），他们有现成框架，24小时即可交付源码。
-        </div>
-
-        <!-- 专家卡片 1 -->
-        <div class="dev-card">
-            <div class="dev-info">
-                <h3><span>⭐ 4.9 (320+ Orders)</span> 👑 Senior Python & Crypto Dev</h3>
-                <p>专精高性能 API 接入、高频交易 Bot 与自动化脚本定制，交付极快，支持全套源码交接。</p>
-            </div>
-            <!-- 🔴 把下面 href 里的链接换成你的 Fiverr Affiliate 专属链接 🔴 -->
-            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_1" class="btn-fiverr" target="_blank">
-                获取该开发者联系方式 & 定制同款 ➔
-            </a>
-        </div>
-
-        <!-- 专家卡片 2 -->
-        <div class="dev-card">
-            <div class="dev-info">
-                <h3><span>⭐ 5.0 (180+ Orders)</span> 🚀 Full-Stack & Web Automation Expert</h3>
-                <p>擅长搞定各种反爬、Webhook 消息推送、以及 24 小时云端服务器 (VPS) 部署挂机方案。</p>
-            </div>
-            <!-- 🔴 把下面 href 里的链接换成你的 Fiverr Affiliate 专属链接 🔴 -->
-            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_2" class="btn-fiverr" target="_blank">
-                查看专家主页并获取最低报价 ➔
-            </a>
-        </div>
-
-        <div class="footer-tip">
-            Disclaimer: Affiliate links included. We may earn a commission at no extra cost to you.
-        </div>
-    </div>
-</div>
-
-</body>
-</html>
+            <div class="terminal-scroll" id="terminalLog">
+                <!-- 第一轮输出 -->
+                <div class="terminal-line dim">> initializing quant_engine v2.4...</div>
+                <div class="terminal-line">> connecting to node websocket (latency: <span class="hl">12ms</span>)...</div>
+                <div class="terminal-line dim">> [SCAN] monitoring mempool spreads...</div>
+                <div class="terminal-line success">> [SUCCESS] Arbitrage Executed | Pair: SOL/USDC</div>
+                <div class="terminal-line profit" id="profit-1">> [PROFIT] +$42.50 USD (Gas: 0.0005 SOL)</div>
+                <div class="terminal-line dim">> [SCAN] checking liquidity pools...</div>
+                <div class="terminal-line success">> [SUCCESS] Arbitrage Executed | Pair: ETH/USDT</div>
+                <div class="terminal-line profit" id="profit-2">> [PROFIT] +$88.20 USD (Gas: 0.0012 ETH)</div>
+                
+                <!-- 无缝循环冗余（确保滚动时没有断层） -->
+                <div class="terminal-line dim">> initializing quant_engine v2.4...</div>
+                <div class="terminal-line">> connecting to node
