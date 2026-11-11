@@ -19,15 +19,10 @@
         /* 内容主体区 */
         .content { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
 
-        /* 动态终端框（修复布局挤压问题） */
+        /* 动态终端框 */
         .terminal-box { background: #030712; border: 1px solid #374151; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: #34d399; line-height: 1.6; height: 110px; overflow: hidden; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
         .terminal-scroll { position: absolute; left: 10px; right: 10px; top: 10px; display: flex; flex-direction: column; gap: 2px; animation: slideUp 10s linear infinite; }
-        
-        /* 平滑滚动动画 */
-        @keyframes slideUp {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
+        @keyframes slideUp { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
         .terminal-line { white-space: nowrap; opacity: 0.9; }
         .terminal-line.dim { color: #6b7280; }
@@ -35,9 +30,10 @@
         .terminal-line.success { color: #60a5fa; }
         .terminal-line.profit { color: #10b981; font-weight: bold; }
 
-        /* 提示卡片 */
-        .spec-box { background: #1a2234; border-radius: 8px; padding: 10px 12px; font-size: 12px; color: #9ca3af; line-height: 1.4; border-left: 3px solid #3b82f6; }
-        .spec-box b { color: #e5e7eb; }
+        /* 沟通话术指导卡片（解决你提到的“带着需求去找”痛点） */
+        .guide-box { background: #1a2234; border-radius: 8px; padding: 12px; font-size: 12px; color: #9ca3af; line-height: 1.5; border-left: 3px solid #10b981; }
+        .guide-box b { color: #fff; display: block; margin-bottom: 4px; }
+        .prompt-snippet { background: #0b0f19; border: 1px dashed #374151; padding: 8px; border-radius: 6px; color: #34d399; margin-top: 6px; font-family: monospace; font-size: 11px; }
 
         /* 核心卡片：精选外包专家 */
         .dev-card { background: #1f2937; border-radius: 10px; padding: 14px; border: 1px solid #374151; display: flex; flex-direction: column; gap: 10px; }
@@ -58,8 +54,8 @@
     <!-- 1. 顶部横幅 -->
     <div class="header-banner">
         <div class="badge">🔥 实盘验证 · 24H 无人值守</div>
-        <h1>“别再自己熬夜硬啃代码了，量化交给我，底层交给专业外包。”</h1>
-        <p>这是我上周花 $80 找海外专家定制的自动化套利 Bot 运行实录与精选开发者清单。</p>
+        <h1>“别去问‘有没有包赚的软件’，直接把需求交给专业外包。”</h1>
+        <p>这是我定制自动化量化 Bot 的实盘日志。用正确的姿势提需求，才能让开发者 24 小时内完美交付。</p>
     </div>
 
     <div class="content">
@@ -86,10 +82,12 @@
             </div>
         </div>
 
-        <!-- 3. 省钱提示框 -->
-        <div class="spec-box">
-            <b>💡 核心省钱秘籍：</b>
-            点击下方专家时，直接把需求写明（如：<i>“API对接 + 自动化执行 + 风险熔断”</i>），他们有现成框架，24小时即可交付源码。
+        <!-- 3. 提需求话术指导（落地页核心亮点） -->
+        <div class="guide-box">
+            <b>💡 聪明人的沟通话术（点击下方专家后直接发送）：</b>
+            <div class="prompt-snippet">
+                "Hi, I need a lightweight Python trading bot script with WebSocket API integration, auto-execution, and basic risk management. Can you deliver this in 24h?"
+            </div>
         </div>
 
         <!-- 4. 推荐开发者卡片 1 -->
@@ -99,7 +97,7 @@
                 <p>专精高性能 API 接入、高频交易 Bot 与自动化脚本定制，交付极快，支持全套源码交接。</p>
             </div>
             <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_1" class="btn-fiverr" target="_blank">
-                获取该开发者联系方式 & 定制同款 ➔
+                联系该开发者并发送定制需求 ➔
             </a>
         </div>
 
@@ -110,7 +108,7 @@
                 <p>擅长搞定各种反爬、Webhook 消息推送、以及 24 小时云端服务器 (VPS) 部署挂机方案。</p>
             </div>
             <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_2" class="btn-fiverr" target="_blank">
-                查看专家主页并获取最低报价 ➔
+                联系专家主页并获取最低报价 ➔
             </a>
         </div>
 
