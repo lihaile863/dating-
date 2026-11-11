@@ -8,55 +8,61 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
         body { background-color: #030712; color: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
         
-        .container { width: 100%; max-width: 480px; background: #0f172a; border-radius: 16px; border: 1px solid #1e293b; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); overflow: hidden; }
+        .container { width: 100%; max-width: 480px; background: #0b1120; border-radius: 14px; border: 1px solid #1e293b; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); overflow: hidden; }
 
-        /* 顶部硬核状态栏 */
-        .system-status { background: #090d16; padding: 12px 18px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b; }
+        /* 顶部极客状态栏 */
+        .system-status { background: #060913; padding: 10px 16px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; color: #64748b; }
         .sys-badge { display: flex; align-items: center; gap: 6px; color: #34d399; font-weight: bold; }
-        .pulse-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+        .pulse-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1); } }
 
         /* 头部视觉区 */
-        .hero-section { padding: 20px; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #1e293b; }
-        .hero-section h1 { font-size: 15px; font-weight: 700; color: #f8fafc; line-height: 1.5; margin-bottom: 6px; }
-        .hero-section p { font-size: 12px; color: #94a3b8; }
+        .hero-section { padding: 16px; background: linear-gradient(180deg, #111c30 0%, #0b1120 100%); border-bottom: 1px solid #1e293b; }
+        .hero-section h1 { font-size: 14px; font-weight: 700; color: #f8fafc; line-height: 1.4; margin-bottom: 4px; }
+        .hero-section p { font-size: 11.5px; color: #94a3b8; }
 
         /* 主体内容区 */
-        .content { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+        .content { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
 
-        /* 高逼格彭博风终端日志框 */
-        .terminal-box { background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 12px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #34d399; line-height: 1.6; height: 125px; overflow: hidden; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.9); }
-        .terminal-scroll { position: absolute; left: 12px; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 3px; animation: slideUp 12s linear infinite; }
+        /* 彭博风终端日志框 */
+        .terminal-box { background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: #34d399; line-height: 1.5; height: 115px; overflow: hidden; position: relative; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); }
+        .terminal-scroll { position: absolute; left: 10px; right: 10px; top: 10px; display: flex; flex-direction: column; gap: 3px; animation: slideUp 12s linear infinite; }
         @keyframes slideUp { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-
-        .t-line { white-space: nowrap; }
         .t-dim { color: #475569; }
         .t-hl { color: #f43f5e; font-weight: bold; }
         .t-blue { color: #38bdf8; }
         .t-profit { color: #10b981; font-weight: bold; }
 
-        /* 策略话术卡片 */
-        .blueprint-box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 14px; font-size: 12px; color: #9ca3af; line-height: 1.5; border-left: 3px solid #38bdf8; }
-        .blueprint-box b { color: #f3f4f6; display: block; margin-bottom: 4px; font-size: 12.5px; }
-        .code-block { background: #030712; border: 1px solid #1e293b; padding: 10px; border-radius: 6px; color: #38bdf8; margin-top: 8px; font-family: monospace; font-size: 11px; word-break: break-all; }
+        /* 场景选择标签栏（支持多流派切换 Prompt） */
+        .scenario-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+        .scenario-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { background: #111827; border: 1px solid #334155; color: #94a3b8; font-size: 10px; padding: 5px 8px; border-radius: 6px; white-space: nowrap; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background: #0284c7; border-color: #38bdf8; color: #fff; font-weight: bold; }
 
-        /* 核心工程矩阵卡片 (高逼格架构师面板) */
-        .engineer-card { background: #162032; border: 1px solid #283548; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.2s; }
-        .engineer-card:hover { border-color: #38bdf8; }
+        /* 赛博朋克风 Prompt 动态面板 */
+        .blueprint-box { background: #0d1526; border: 1px solid #1e3a5f; border-radius: 8px; padding: 12px; font-size: 11.5px; color: #cbd5e1; line-height: 1.5; }
+        .blueprint-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .blueprint-header b { color: #38bdf8; font-size: 11.5px; }
+        .copy-hint { font-size: 10px; color: #10b981; background: rgba(16,185,129,0.1); padding: 1px 5px; border-radius: 4px; }
+        .code-block { background: #030712; border: 1px solid #1e293b; padding: 8px 10px; border-radius: 6px; color: #38bdf8; font-family: monospace; font-size: 10.5px; word-break: break-all; margin-top: 4px; }
+
+        /* 全新赛博极客风专家矩阵（彻底摆脱传统电商方块感） */
+        .cyber-expert-card { background: linear-gradient(135deg, #0f172a 0%, #131d31 100%); border: 1px solid #22304a; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; }
+        .cyber-expert-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #0284c7; }
         
-        .eng-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .eng-title h3 { font-size: 13.5px; font-weight: 700; color: #f8fafc; }
-        .eng-title span { font-size: 11px; color: #94a3b8; display: block; margin-top: 2px; }
-        .eng-rating { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+        .ce-top { display: flex; justify-content: space-between; align-items: center; }
+        .ce-title { font-size: 12.5px; font-weight: 700; color: #f8fafc; }
+        .ce-badge { font-size: 10px; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(251, 191, 36, 0.2); }
 
-        .eng-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-        .tag { background: #0f172a; color: #cbd5e1; font-size: 10.5px; padding: 2px 8px; border-radius: 4px; border: 1px solid #334155; }
+        .ce-desc { font-size: 11px; color: #94a3b8; }
+        
+        .ce-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+        .ce-tag { font-size: 10px; color: #38bdf8; background: #030712; padding: 2px 6px; border-radius: 4px; border: 1px solid #1e293b; }
+        
+        .btn-cyber { background: #0284c7; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: background 0.2s; }
+        .btn-cyber:hover { background: #0369a1; }
 
-        /* 高转化强行动按钮 */
-        .btn-deploy { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; text-decoration: none; text-align: center; display: block; box-shadow: 0 4px 15px rgba(2,132,199,0.3); transition: transform 0.1s, box-shadow 0.2s; }
-        .btn-deploy:active { transform: scale(0.98); }
-
-        .footer-note { text-align: center; font-size: 10.5px; color: #475569; padding: 8px 0; }
+        .footer-note { text-align: center; font-size: 10px; color: #475569; padding: 6px 0; }
     </style>
 </head>
 <body>
@@ -70,77 +76,79 @@
 
     <!-- 顶部横幅 -->
     <div class="hero-section">
-        <h1 data-i18n="heroTitle">“Autonomous Arbitrage Engine & Protocol Integration Hub”</h1>
-        <p data-i18n="heroDesc">Verified real-time execution telemetry and vetted core engineering squads.</p>
+        <h1 data-i18n="heroTitle">“Autonomous Arbitrage & Protocol Execution Hub”</h1>
+        <p data-i18n="heroDesc">Select execution objective and dispatch vetted core engineering specs.</p>
     </div>
 
     <div class="content">
         <!-- 终端日志框 -->
         <div class="terminal-box">
             <div class="terminal-scroll">
-                <div class="t-line t-dim">> initializing core_protocol v3.8_stable...</div>
-                <div class="t-line">> handshake established with validator nodes (ping: <span class="t-hl">9ms</span>)...</div>
-                <div class="t-line t-blue">> [MONITOR] scanning mempool liquidity distribution...</div>
-                <div class="t-line t-profit" id="log-1">> [EXECUTION] Arbitrage Success | Pair: SOL/USDC | Spread: +0.82%</div>
-                <div class="t-line t-profit" id="log-2">> [REVENUE] Net Profit: +$52.40 USD (Gas: 0.0004 SOL)</div>
-                <div class="t-line t-dim">> [RISK_FUSE] threshold normal, automated hedging active...</div>
-                <!-- 无缝循环冗余行 -->
-                <div class="t-line t-dim">> initializing core_protocol v3.8_stable...</div>
-                <div class="t-line">> handshake established with validator nodes (ping: <span class="t-hl">8ms</span>)...</div>
-                <div class="t-line t-blue">> [MONITOR] scanning mempool liquidity distribution...</div>
-                <div class="t-line t-profit">> [EXECUTION] Arbitrage Success | Pair: SOL/USDC | Spread: +0.82%</div>
-                <div class="t-line t-profit">> [REVENUE] Net Profit: +$52.40 USD (Gas: 0.0004 SOL)</div>
-                <div class="t-line t-dim">> [RISK_FUSE] threshold normal, automated hedging active...</div>
+                <div class="t-dim">> initializing core_protocol v3.8_stable...</div>
+                <div class="t-dim">> validator handshake (ping: <span class="t-hl">8ms</span>)...</div>
+                <div class="t-blue">> [MONITOR] scanning mempool liquidity distribution...</div>
+                <div class="t-profit" id="log-1">> [EXECUTION] Arbitrage Success | Pair: SOL/USDC | Spread: +0.82%</div>
+                <div class="t-profit" id="log-2">> [REVENUE] Net Profit: +$52.40 USD (Gas: 0.0004 SOL)</div>
+                <div class="t-dim">> [RISK_FUSE] threshold normal, automated hedging active...</div>
+                <!-- 循环冗余 -->
+                <div class="t-dim">> initializing core_protocol v3.8_stable...</div>
+                <div class="t-dim">> validator handshake (ping: <span class="t-hl">8ms</span>)...</div>
+                <div class="t-blue">> [MONITOR] scanning mempool liquidity distribution...</div>
+                <div class="t-profit">> [EXECUTION] Arbitrage Success | Pair: SOL/USDC | Spread: +0.82%</div>
+                <div class="t-profit">> [REVENUE] Net Profit: +$52.40 USD (Gas: 0.0004 SOL)</div>
+                <div class="t-dim">> [RISK_FUSE] threshold normal, automated hedging active...</div>
             </div>
         </div>
 
-        <!-- 架构需求提示框 -->
+        <!-- 场景切换标签栏 -->
+        <div class="scenario-tabs">
+            <button class="tab-btn active" onclick="switchScenario('sniper')">⚡ Memes/Sniper</button>
+            <button class="tab-btn" onclick="switchScenario('copy')">🐋 Copy Trading</button>
+            <button class="tab-btn" onclick="switchScenario('hedge')">🛡️ Hedging/Arb</button>
+            <button class="tab-btn" onclick="switchScenario('discipline')">🧘 Zero-Emotion</button>
+        </div>
+
+        <!-- 动态 Prompt 面板 -->
         <div class="blueprint-box">
-            <b data-i18n="bpTitle">⚙️ Standard Engineering Briefing Spec:</b>
-            <span data-i18n="bpDesc">Deploy the following verified requirement parameters to commission core protocol builders directly:</span>
-            <div class="code-block" id="promptCode">
-                "Require lightweight Python execution script, WebSocket low-latency RPC integration, auto-hedging risk fuse, and 24/7 PM2 daemon supervision."
+            <div class="blueprint-header">
+                <b id="bp-title">🎯 Target Spec: Memes & Token Launch Sniper</b>
+                <span class="copy-hint">Ready to copy</span>
+            </div>
+            <div class="code-block" id="promptDisplay">
+                "Require high-speed Solana/EVM sniper bot script for new token launches. Optimized for anti-MEV front-running, ultra-low latency RPC connection, and automatic slippage/tax safety checks."
             </div>
         </div>
 
-        <!-- 专家卡片 1 (高逼格重构) -->
-        <div class="engineer-card">
-            <div class="eng-header">
-                <div class="eng-title">
-                    <h3 data-i18n="eng1Name">Core Protocol & High-Frequency Squad</h3>
-                    <span data-i18n="eng1Role">Specialized in Low-Latency API & Execution Scripts</span>
-                </div>
-                <div class="eng-rating">⭐ 4.9 (340+ Delivered)</div>
+        <!-- 赛博极客风专家矩阵卡片 1 -->
+        <div class="cyber-expert-card">
+            <div class="ce-top">
+                <div class="ce-title" data-i18n="eng1Name">Core Protocol & High-Frequency Squad</div>
+                <div class="ce-badge">⭐ 4.9 (340+)</div>
             </div>
-            <div class="eng-tags">
-                <span class="tag">Python / Rust</span>
-                <span class="tag">WebSocket RPC</span>
-                <span class="tag">Automated Hedging</span>
+            <div class="ce-desc" data-i18n="eng1Role">Specialized in Low-Latency API, Mempool Tracking & Execution Scripts</div>
+            <div class="ce-footer">
+                <span class="ce-tag">Python / Rust / RPC</span>
+                <!-- 🔴 替换为你的 Fiverr 联盟链接 1 🔴 -->
+                <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_1" class="btn-cyber" target="_blank" data-i18n="btn1Text">
+                    Dispatch Spec ➔
+                </a>
             </div>
-            <!-- 🔴 请在此处替换你的 Fiverr Affiliate 专属联盟链接 1 🔴 -->
-            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_1" class="btn-deploy" target="_blank" data-i18n="btn1Text">
-                Commission Architecture & Deploy ➔
-            </a>
         </div>
 
-        <!-- 专家卡片 2 (高逼格重构) -->
-        <div class="engineer-card">
-            <div class="eng-header">
-                <div class="eng-title">
-                    <h3 data-i18n="eng2Name">Autonomous Infrastructure & VPS Ops</h3>
-                    <span data-i18n="eng2Role">Specialized in 24/7 Cloud Daemon & Secure Failover</span>
-                </div>
-                <div class="eng-rating">⭐ 5.0 (195+ Delivered)</div>
+        <!-- 赛博极客风专家矩阵卡片 2 -->
+        <div class="cyber-expert-card" style="border-left-color: #10b981;">
+            <div class="ce-top" style="position:relative;">
+                <div class="ce-title" data-i18n="eng2Name">Autonomous Infrastructure & VPS Ops</div>
+                <div class="ce-badge" style="color:#34d399; background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.2);">⭐ 5.0 (195+)</div>
             </div>
-            <div class="eng-tags">
-                <span class="tag">Linux / Docker</span>
-                <span class="tag">Webhook Alarms</span>
-                <span class="tag">Zero-Downtime VPS</span>
+            <div class="ce-desc" data-i18n="eng2Role">Specialized in 24/7 Cloud Daemon, PM2 Supervision & Secure Failover</div>
+            <div class="ce-footer">
+                <span class="ce-tag">Linux / Docker / VPS</span>
+                <!-- 🔴 替换为你的 Fiverr 联盟链接 2 🔴 -->
+                <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_2" class="btn-cyber" style="background:#059669;" target="_blank" data-i18n="btn2Text">
+                    Initialize Setup ➔
+                </a>
             </div>
-            <!-- 🔴 请在此处替换你的 Fiverr Affiliate 专属联盟链接 2 🔴 -->
-            <a href="https://www.fiverr.com/YOUR_AFFILIATE_LINK_2" class="btn-deploy" target="_blank" data-i18n="btn2Text">
-                Initialize Infrastructure Setup ➔
-            </a>
         </div>
 
         <div class="footer-note">
@@ -150,65 +158,86 @@
 </div>
 
 <script>
-    // 动态模拟盈利数据高频跳动，拉满实盘视觉冲击
+    // 4个不同场景的 Prompt 数据源
+    const scenarios = {
+        sniper: {
+            title: "🎯 Target Spec: Memes & Token Launch Sniper",
+            code: "\"Require high-speed Solana/EVM sniper bot script for new token launches. Optimized for anti-MEV front-running, ultra-low latency RPC connection, and automatic slippage/tax safety checks.\""
+        },
+        copy: {
+            title: "🎯 Target Spec: Smart Money / Wallet Copy Trading",
+            code: "\"Require real-time EVM/Solana mempool monitoring script to track specific wallet addresses. Instant execution trigger upon target buy/sell events, with custom gas-multiplier configuration and Telegram webhook alerts.\""
+        },
+        hedge: {
+            title: "🎯 Target Spec: Cross-Exchange Arbitrage & Hedging",
+            code: "\"Require lightweight Python arbitrage script with multi-exchange WebSocket API integration, cross-market spread monitoring, automated auto-hedging risk fuse, and 24/7 daemon supervision.\""
+        },
+        discipline: {
+            title: "🎯 Target Spec: Zero-Emotion Disciplined Execution",
+            code: "\"Require lightweight Python execution script to eliminate emotional trading. Needs strict risk-reward ratio parameters, automated stop-loss/take-profit triggers, and 24/7 PM2 daemon supervision without manual intervention.\""
+        }
+    };
+
+    function switchScenario(type) {
+        // 切换按钮高亮
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        // 切换 Prompt 内容
+        document.getElementById('bp-title').innerText = scenarios[type].title;
+        document.getElementById('promptDisplay').innerText = scenarios[type].code;
+    }
+
+    // 终端收益高频跳动
     setInterval(() => {
         const p1 = (Math.random() * 25 + 45).toFixed(2);
-        const p2 = (Math.random() * 40 + 70).toFixed(2);
         const l1 = document.getElementById('log-1');
         const l2 = document.getElementById('log-2');
         if(l1) l1.innerHTML = `> [EXECUTION] Arbitrage Success | Pair: SOL/USDC | Spread: +${(Math.random()*0.5+0.6).toFixed(2)}%`;
         if(l2) l2.innerHTML = `> [REVENUE] Net Profit: +$${p1} USD (Gas: 0.0004 SOL)`;
     }, 3500);
 
-    // 多语言自动适配字典（保持与 news.html 完美同步）
+    // 多语言适配
     const i18nTerminal = {
         en: {
-            heroTitle: "“Autonomous Arbitrage Engine & Protocol Integration Hub”",
-            heroDesc: "Verified real-time execution telemetry and vetted core engineering squads.",
-            bpTitle: "⚙️ Standard Engineering Briefing Spec:",
-            bpDesc: "Deploy the following verified requirement parameters to commission core protocol builders directly:",
+            heroTitle: "“Autonomous Arbitrage & Protocol Execution Hub”",
+            heroDesc: "Select execution objective and dispatch vetted core engineering specs.",
             eng1Name: "Core Protocol & High-Frequency Squad",
-            eng1Role: "Specialized in Low-Latency API & Execution Scripts",
+            eng1Role: "Specialized in Low-Latency API, Mempool Tracking & Execution Scripts",
             eng2Name: "Autonomous Infrastructure & VPS Ops",
-            eng2Role: "Specialized in 24/7 Cloud Daemon & Secure Failover",
-            btn1Text: "Commission Architecture & Deploy ➔",
-            btn2Text: "Initialize Infrastructure Setup ➔"
+            eng2Role: "Specialized in 24/7 Cloud Daemon, PM2 Supervision & Secure Failover",
+            btn1Text: "Dispatch Spec ➔",
+            btn2Text: "Initialize Setup ➔"
         },
         th: {
-            heroTitle: "“ศูนย์กลางระบบอาร์บิทราจอัตโนมัติและโครงสร้างพื้นฐานโปรโตคอล”",
-            heroDesc: "บันทึกการทำงานจริงแบบเรียลไทม์และทีมวิศวกรซอฟต์แวร์ระดับมืออาชีพ",
-            bpTitle: "⚙️ ข้อมูลจำเพาะข้อกำหนดมาตรฐาน:",
-            bpDesc: "ใช้พารามิเตอร์ข้อกำหนดที่ผ่านการตรวจสอบเหล่านี้เพื่อสั่งจ้างผู้พัฒนาแกนหลักได้ทันที:",
-            eng1Name: "ทีมพัฒนาโปรโตคอลและระบบความถี่สูง",
-            eng1Role: "เชี่ยวชาญ API ความหน่วงต่ำและสคริปต์ประมวลผลอัตโนมัติ",
-            eng2Name: "ทีมโครงสร้างพื้นฐานระบบคลาวด์และ VPS",
-            eng2Role: "เชี่ยวชาญการรันระบบ 24 ชม. และระบบสำรองความปลอดภัย",
-            btn1Text: "ติดต่อสถาปัตยกรรมและเริ่มพัฒนาระบบ ➔",
-            btn2Text: "เริ่มต้นตั้งค่าโครงสร้างพื้นฐาน ➔"
+            heroTitle: "“ศูนย์กลางระบบอาร์บิทราจและโปรโตคอลอัตโนมัติ”",
+            heroDesc: "เลือกเป้าหมายการรันระบบและส่งสเปกวิศวกรรมที่ผ่านการตรวจสอบแล้ว",
+            eng1Name: "ทีมโปรโตคอลและความถี่สูง",
+            eng1Role: "เชี่ยวชาญ API ความหน่วงต่ำ การติดตาม Mempool และสคริปต์รันคำสั่ง",
+            eng2Name: "โครงสร้างพื้นฐานและ VPS Ops",
+            eng2Role: "เชี่ยวชาญระบบรัน 24 ชม. และระบบสำรองข้อมูลความปลอดภัย",
+            btn1Text: "ส่งสเปกงาน ➔",
+            btn2Text: "เริ่มตั้งค่า ➔"
         },
         pt: {
-            heroTitle: "“Hub de Automação de Arbitragem e Integração de Protocolos”",
-            heroDesc: "Telemetria de execução em tempo real verificada e equipes de engenharia de ponta.",
-            bpTitle: "⚙️ Especificação Padrão de Engenharia:",
-            bpDesc: "Implante os seguintes parâmetros verificados para comissionar construtores de protocolo diretamente:",
+            heroTitle: "“Hub de Automação de Arbitragem e Protocolos”",
+            heroDesc: "Selecione o objetivo de execução e envie especificações de engenharia.",
             eng1Name: "Squad de Protocolos e Alta Frequência",
-            eng1Role: "Especializado em API de baixa latência e scripts de execução",
+            eng1Role: "Especializado em API de baixa latência e rastreamento de Mempool",
             eng2Name: "Infraestrutura Autônoma & VPS Ops",
-            eng2Role: "Especializado em daemons em nuvem 24/7 e failover seguro",
-            btn1Text: "Comissionar Arquitetura & Implantar ➔",
-            btn2Text: "Inicializar Configuração de Infra ➔"
+            eng2Role: "Especializado em daemons 24/7 e failover seguro",
+            btn1Text: "Enviar Spec ➔",
+            btn2Text: "Inicializar ➔"
         },
         es: {
-            heroTitle: "“Centro de Automatización de Arbitraje e Integración de Protocolos”",
-            heroDesc: "Telemetría de ejecución en vivo verificada y equipos de ingeniería de élite.",
-            bpTitle: "⚙️ Especificación de Ingeniería Estándar:",
-            bpDesc: "Implementa estos parámetros verificados para comisionar a desarrolladores de protocolos directamente:",
+            heroTitle: "“Centro de Automatización de Arbitraje y Protocolos”",
+            heroDesc: "Seleccione el objetivo de ejecución y envíe especificaciones de ingeniería.",
             eng1Name: "Escuadra de Protocolos y Alta Frecuencia",
-            eng1Role: "Especializado en APIs de baja latencia y scripts de ejecución",
+            eng1Role: "Especializado en APIs de baja latencia y seguimiento de Mempool",
             eng2Name: "Infraestructura Autónoma y VPS Ops",
-            eng2Role: "Especializado en DAEMONs en la nube 24/7 y redundancia segura",
-            btn1Text: "Comisionar Arquitectura y Desplegar ➔",
-            btn2Text: "Inicializar Configuración de Infra ➔"
+            eng2Role: "Especializado en DAEMONs 24/7 y redundancia segura",
+            btn1Text: "Enviar Spec ➔",
+            btn2Text: "Inicializar ➔"
         }
     };
 
